@@ -216,7 +216,7 @@ ui <- navbarPage(
                br(),
                br(),
                
-               fluidRow(column( plotOutput("SprayChartP"), width = 6, height = 24)),
+               fluidRow(column( plotOutput("SprayChartP"), width = 12, height = 48)),
                
                
              )
@@ -872,6 +872,44 @@ server <- function(input, output, session) {
             panel.grid.minor = element_blank()) + facet_wrap(~ details.type.description )
     
   })
+  
+  
+  ## SprayChart ##
+  
+  output$SprayChartP<- renderPlot({
+    
+    
+    dataFilter <- reactive({
+      TestTrackMan  %>%
+        filter(#fielding_team ==input$TeamP ,
+          matchup.pitcher.fullName == input$Pitcher,
+          game_date >= input$DateP[1] &
+            game_date <= input$DateP[2],
+          matchup.splits.pitcher == input$BatterSide,
+          Count %in% input$Count,
+          matchup.splits.menOnBase %in% input$Situation,
+          details.call.description %in% c("In play, out(s)","In play, no out","In play, run(s)"))
+    }) 
+    ggplot(dataFilter(), aes(x = hitData.coordinates.coordX , y = hitData.coordinates.coordY, color = PlayResult )) +
+      geom_point(size = 1.25) +
+      #stat_density_2d(aes(fill = ..level..), geom = "polygon")+
+      #scale_fill_distiller(palette="RdBu", direction=-1)+
+      geom_spraychart(stadium_transform_coords = FALSE, stadium_segments = "all", stadium_ids = "astros") +
+      coord_fixed() +ggtitle(label = 'Spray Chart')+ scale_y_reverse() + scale_x_reverse()+
+      #scale_colour_manual(values = c("Out" == "darkred", "Single" == "forestgreen", "Double" == "yellow" , "Triple" == "orange" , "HomeRun" ==  "skyblue" , "Sacrifice" == "pink", "Error" == "green" , "NA" == "grey" ))+
+      theme_bw() + theme(plot.title = element_text(size = 11, face = "bold", hjust = 0.5)) +
+      theme(legend.text = element_text(size = 10), axis.title = element_blank())  +
+      theme(strip.text = element_text(size = 7, face = 'bold'),
+            axis.text.x=element_blank(), #remove x axis labels
+            axis.text.y=element_blank(),
+            panel.grid.major = element_blank(), 
+            panel.grid.minor = element_blank()) 
+    
+  })
+  
+  
+  
+  
   
   
 }
