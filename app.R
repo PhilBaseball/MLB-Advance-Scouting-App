@@ -43,10 +43,28 @@ library(tidyverse)
 ## Colors for the heatmaps
 heat_colors_interpolated <- colorRampPalette(paletteer::paletteer_d("RColorBrewer::RdBu", n = 9, direction = -1))(16)
 
-## Read CSVs ## 
+## Read PreMade CSVs ## 
 TestTrackMan<-list.files(path = "C:/RStudioProjects/AthleteLab/MLB_Pitcher_ADV_Scouting", pattern = "*.csv") %>% 
   map_df(~read_csv(.))
 
+
+### To Try the app you can use this instead ###
+
+#x <- map_df(.x = seq.Date(as.Date('2024-09-05'), 
+#                          as.Date('2024-09-06'), 
+#                          'day'), 
+#            ~get_game_pks_mlb(date = .x, 
+#                              level_ids = c(1))
+#)
+
+#safe_mlb <- safely(get_pbp_mlb)
+
+#TestTrackMan <- map(.x = x %>%
+#              filter(status.codedGameState == "F") %>% 
+#              pull(game_pk), 
+#            ~safe_mlb(game_pk = .x)) %>%
+#  map('result') %>%
+#  bind_rows()
 
 
 #New Variables to make things easier later
