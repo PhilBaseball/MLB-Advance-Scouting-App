@@ -22,22 +22,9 @@ library(caret)
 library(randomForest)
 library(broom)
 library(shiny)
-
-#install.packages("shiny")
-library(shiny)
-
-library(tidyverse)
-#install.packages("dplyr")
-library(dplyr)
-
-#install.packages("DT")
 library(DT)
-
-#install.packages("ggplot2")
-library(ggplot2)
 library(baseballr)
-#install.packages('tidyverse')
-library(tidyverse)
+
 
 
 ## Colors for the heatmaps
@@ -933,4 +920,5 @@ server <- function(input, output, session) {
 }
   
   
+
 shinyApp(ui = ui, server = server)
